@@ -13,21 +13,13 @@
 
 		for ( var dElem in json) {
 			result += "<h3>" + dElem + "</h3>";
-			if (json[dElem].constructor === Array) {
-				for ( var pElem in json[dElem]) {
-					result += "<p> <a href=\"" + json[dElem][pElem].page + "\" target=\"_blank\">"
-							+ json[dElem][pElem].page
+			for ( var pElem in json[dElem]["pageCountList"]) {
+				result += "<p> <a href=\"" + json[dElem]["pageCountList"][pElem].page + "\" target=\"_blank\">"
+							+ json[dElem]["pageCountList"][pElem].page
 							+ "</a> &nbsp &nbsp &nbsp "
-							+ json[dElem][pElem].count + "</p>";
-				}
-			} else {
-				result += "<p> <a href=\"" + json[dElem].page + "\" target=\"_blank\">"
-						+ json[dElem].page
-						+ "</a> &nbsp &nbsp &nbsp "
-						+ json[dElem].count + "</p>";
+							+ json[dElem]["pageCountList"][pElem].count + "</p>";
 			}
 		}
-		;
 		return result;
 	}
 

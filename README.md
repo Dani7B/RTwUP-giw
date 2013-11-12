@@ -1,7 +1,7 @@
 #RTwUP
 
 ##Realtime Twitter Url Popularity
-Given a suitably filtered stream of documents returned from a Twitter query, calculate real-time statistics and show the ranking of the most twittered URLs since system activation.
+Given a suitably filtered stream of documents returned by a Twitter query, calculate real-time statistics and show the ranking of the most twittered URLs since system activation.
 The statistics must be updated on screen every N seconds.  
 They show the links organized into various domain categories, each with its counting popularity:  
 
@@ -14,7 +14,7 @@ They show the links organized into various domain categories, each with its coun
 ...  
 
 ##Data Stream Description and Requirements: 
-The system has to use Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filter them (e.g. according to the coordinates of a polygon centered on Rome, Milan or a city of your choice).  
+The system has to use Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filters them (e.g. according to the coordinates of a polygon centered on Rome, Milan or a city of your choice).  
 The links of interest are the ones retrieved from the entities/urls field of the Tweet json: 
 * first of all, links have to be expanded, reversing the output of Twitter's shortening service (*t.co*);
 * if the Tweet contains the expanded form of the URL, the count is assigned to it;

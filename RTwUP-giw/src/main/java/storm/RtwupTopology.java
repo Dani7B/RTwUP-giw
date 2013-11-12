@@ -38,10 +38,11 @@ public class RtwupTopology {
 			conf.setNumWorkers(3);
 
 			conf.put("topN", Integer.parseInt(args[1])); //assuming that topN is the second argument
-			conf.put("sw0", Double.parseDouble(args[2]));
-			conf.put("sw1", Double.parseDouble(args[3]));
-			conf.put("ne0", Double.parseDouble(args[4]));
-			conf.put("ne1", Double.parseDouble(args[5]));
+			conf.put("host", args[2]); //assuming that topN is the second argument
+			conf.put("sw0", Double.parseDouble(args[3]));
+			conf.put("sw1", Double.parseDouble(args[4]));
+			conf.put("ne0", Double.parseDouble(args[5]));
+			conf.put("ne1", Double.parseDouble(args[6]));
 			
 			try {
 				StormSubmitter.submitTopology(args[0], conf,
@@ -53,6 +54,7 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("topN", 10);
+			conf.put("host", "localhost");
 			conf.put("sw0", 12.20);
 			conf.put("sw1", 41.60);
 			conf.put("ne0", 12.80);
