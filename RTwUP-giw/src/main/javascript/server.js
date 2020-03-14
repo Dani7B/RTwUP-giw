@@ -1,45 +1,60 @@
 /**
- *   Node.js server script
- *   Required node packages: express, redis, socket.io
+ * Node.js server script Required node packages: express, redis, socket.io
  */
 const PORT = 8000;
 const HOST = 'localhost';
- 
-var express = require('express'),
-    http = require('http'),
-    server = http.createServer(app);
- 
-var app = express();
- 
+
+const express = require('express');
+const http = require('http');
+const path = require('path');
 const redis = require('redis');
-const client = redis.createClient();
-log('info', 'Connected to Redis server.');
- 
 const io = require('socket.io');
- 
+
+const app = express();
+
+const server = http.createServer(app);
+
+app.use(express.static('public'));
+
+// Serves all the request which includes /images in the url from Images folder
+app.use('/images', express.static(__dirname + '/Images'));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.resolve('index.html'));
+});
+
 if (!module.parent) {
-    server.listen(PORT, HOST);
-    const socket  = io.listen(server);
- 
-    socket.on('connection', function(client) {
-        const subscriber = redis.createClient();
-        subscriber.subscribe('RTwUP');
- 
-        subscriber.on("message", function(channel, message) {
-            client.send(message);
-            log('msg', "Received from channel"+ channel+ ": "+ message);
+	server.listen(PORT, HOST, function () {
+		const host = server.address().address;
+		const port = server.address().port;
+		const address = `http://${host}:${port}`;
+		log('info', "Server in ascolto all'indirizzo: "+ address);
+	  
+		const socket = io.listen(server);
+	    socket.on('connection', function(client) {
+	    	log("info", "Listening IO");
+	    });
+		
+		const subscriber = redis.createClient();
+		 
+		subscriber.on("connect", function() {
+			log('info', 'Connected to Redis server.');
+	        subscriber.subscribe('RTwUP');
+	        log('info', 'Subscribed to RTwUP.');
+		});
+		
+		subscriber.on("message", function(channel, message) {
+            socket.send(message);
+            log('msg', "Received from channel "+ channel+ ": "+ message);
         });
- 
-        client.on('message', function(msg) {
-        	log('debug', msg);
-        })
- 
-        client.on('disconnect', function() {
-            log('warn', 'Disconnetting from Redis.');
-        	subscriber.quit();
-        });
-    });
-};
+		
+		subscriber.on('disconnect', function() {
+	        log('warn', 'Disconnetting from Redis.');
+	    	subscriber.quit();
+	    });
+		
+	});
+}
 
 function log(type, msg) {
 

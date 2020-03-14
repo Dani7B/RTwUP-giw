@@ -6,11 +6,11 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import storage.PageDictionary;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.BasicOutputCollector;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.topology.base.BaseBasicBolt;
-import backtype.storm.tuple.Tuple;
+import org.apache.storm.tuple.Tuple;
+import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.task.TopologyContext;
+import org.apache.storm.topology.BasicOutputCollector;
+import org.apache.storm.topology.OutputFieldsDeclarer;
 
 /**
  * This bolt publishes the URL ranking to Redis.
@@ -29,19 +29,18 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	private PageDictionary counts;
 	
 	@Override
-	public void prepare(Map conf, TopologyContext context){
-		String host = (String) conf.get("host");
+	public void prepare(Map<String,Object> topoConf, TopologyContext context){
+		String host = (String) topoConf.get("host");
 		this.pool = new JedisPool(new JedisPoolConfig(), host);
 		this.jedis = this.pool.getResource();
-		this.topN = (Long) conf.get("topN");
+		this.topN = (Long) topoConf.get("topN");
 		this.counts = PageDictionary.getInstance();
 	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
 				
 		String ranking = this.counts.getTopNelementsStringified(this.topN);
-		
-		this.jedis.publish("RTwUP", ranking);
+		this.jedis.publish("RTwUP", ranking);		
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
@@ -49,7 +48,8 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 
 	@Override
 	public void cleanup(){
-		this.pool.returnResource(this.jedis);
+		this.jedis.close();
+		this.pool.close();
 		this.pool.destroy();
 	}
 

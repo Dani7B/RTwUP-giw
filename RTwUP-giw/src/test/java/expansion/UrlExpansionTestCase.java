@@ -6,19 +6,43 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
-import java.net.URLConnection;
 
 import static org.testng.Assert.assertEquals;
 
 
 /**
- * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa
+ * @author Daniele Morgantini, Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa
  */
 
 public class UrlExpansionTestCase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlExpansionTestCase.class);
+    
+    private static URL expandUrl(URL shortened) throws IOException {
+
+ 	   final HttpURLConnection connection = (HttpURLConnection) shortened.openConnection(Proxy.NO_PROXY); 
+     
+        final String temp = connection.getHeaderField("Location");
+        
+        URL expandedUrl = null;
+ 		if (temp != null){
+ 			connection.disconnect();
+ 			LOGGER.info(temp);
+ 			expandedUrl = expandUrl(new URL(temp));
+ 		}
+ 		else{
+ 			connection.getHeaderFields();
+ 			expandedUrl = connection.getURL();
+ 			LOGGER.info(expandedUrl.getHost());
+ 	        LOGGER.info(expandedUrl.toString());
+ 			connection.disconnect();
+ 		}
+ 		
+        return expandedUrl;
+    }
     
     @Test
     public void shouldExpand_bitly() throws IOException {
@@ -28,18 +52,7 @@ public class UrlExpansionTestCase {
         final String expected = "https://github.com/Dani7B/RTwUP";
         final URL expectedUrl = new URL(expected);
 
-        final URLConnection connection = shortenedUrl.openConnection();
-        String temp = connection.getHeaderField("Location");
-		URL expandedUrl = null;
-		if (temp != null){
-			 expandedUrl = new URL(temp);
-		}
-		else{
-			connection.getHeaderFields();
-			expandedUrl= connection.getURL();
-		}
-        LOGGER.info(expandedUrl.getHost());
-        LOGGER.info(expandedUrl.toString());
+        final URL expandedUrl = expandUrl(shortenedUrl);
 
         assertEquals(expandedUrl, expectedUrl);
     }
@@ -52,18 +65,7 @@ public class UrlExpansionTestCase {
         final String expected = "https://github.com/Dani7B/RTwUP";
         final URL expectedUrl = new URL(expected);
 
-        final URLConnection connection = shortenedUrl.openConnection();
-        String temp = connection.getHeaderField("Location");
-		URL expandedUrl = null;
-		if (temp != null){
-			 expandedUrl = new URL(temp);
-		}
-		else{
-			connection.getHeaderFields();
-			expandedUrl= connection.getURL();
-		}
-        LOGGER.info(expandedUrl.getHost());
-        LOGGER.info(expandedUrl.toString());
+        final URL expandedUrl = expandUrl(shortenedUrl);
 
         assertEquals(expandedUrl, expectedUrl);
     }
@@ -75,19 +77,8 @@ public class UrlExpansionTestCase {
         final URL shortenedUrl = new URL(shortened);
         final String expected = "https://github.com/Dani7B/RTwUP";
         final URL expectedUrl = new URL(expected);
-
-        final URLConnection connection = shortenedUrl.openConnection();
-        String temp = connection.getHeaderField("Location");
-		URL expandedUrl = null;
-		if (temp != null){
-			 expandedUrl = new URL(temp);
-		}
-		else{
-			connection.getHeaderFields();
-			expandedUrl= connection.getURL();
-		}
-        LOGGER.info(expandedUrl.getHost());
-        LOGGER.info(expandedUrl.toString());
+		
+		final URL expandedUrl = expandUrl(shortenedUrl);
 
         assertEquals(expandedUrl, expectedUrl);
     }
@@ -100,18 +91,7 @@ public class UrlExpansionTestCase {
         final String expected = "https://github.com/Dani7B/RTwUP";
         final URL expectedUrl = new URL(expected);
 
-        final URLConnection connection = shortenedUrl.openConnection();
-        String temp = connection.getHeaderField("Location");
-		URL expandedUrl = null;
-		if (temp != null){
-			 expandedUrl = new URL(temp);
-		}
-		else{
-			connection.getHeaderFields();
-			expandedUrl= connection.getURL();
-		}
-        LOGGER.info(expandedUrl.getHost());
-        LOGGER.info(expandedUrl.toString());
+        final URL expandedUrl = expandUrl(shortenedUrl);
 
         assertEquals(expandedUrl, expectedUrl);
     }
@@ -124,18 +104,7 @@ public class UrlExpansionTestCase {
         final String expected = "https://github.com/Dani7B/RTwUP";
         final URL expectedUrl = new URL(expected);
 
-        final URLConnection connection = shortenedUrl.openConnection();
-        String temp = connection.getHeaderField("Location");
-        URL expandedUrl = null;
-        if (temp != null){
-            expandedUrl = new URL(temp);
-        }
-        else{
-            connection.getHeaderFields();
-            expandedUrl= connection.getURL();
-        }
-        LOGGER.info(expandedUrl.getHost());
-        LOGGER.info(expandedUrl.toString());
+        final URL expandedUrl = expandUrl(shortenedUrl);
 
         assertEquals(expandedUrl, expectedUrl);
     }

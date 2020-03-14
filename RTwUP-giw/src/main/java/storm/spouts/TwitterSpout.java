@@ -3,6 +3,13 @@ package storm.spouts;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.storm.spout.SpoutOutputCollector;
+import org.apache.storm.task.TopologyContext;
+import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.Tuple;
+import org.apache.storm.tuple.Values;
+
 import twitter4j.FilterQuery;
 import twitter4j.GeoLocation;
 import twitter4j.StallWarning;
@@ -13,12 +20,9 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.URLEntity;
 import twitter4j.auth.AccessToken;
-import backtype.storm.spout.SpoutOutputCollector;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.topology.base.BaseRichSpout;
-import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Values;
+import org.apache.storm.topology.IRichSpout;
+
+
 
 /** 
  * 
@@ -29,7 +33,7 @@ import backtype.storm.tuple.Values;
  * 
  * **/
 
-public class TwitterSpout extends BaseRichSpout {
+public class TwitterSpout implements IRichSpout {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,8 +42,43 @@ public class TwitterSpout extends BaseRichSpout {
 	private TwitterStream ts = null;
 	private double[][] bbox = null;
 
-	public void open(Map conf, TopologyContext context,	SpoutOutputCollector collector) {
+	public void nextTuple() {
+		try {
+			Status retrieve = queue.take();
+			URLEntity[] urls = retrieve.getURLEntities();
+			for (URLEntity url : urls)
+				this.collector.emit(new Values(url.getExpandedURL()));
+		} catch (InterruptedException e) {
+			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
+		}
 
+	}
+
+	@Override
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declare(new Fields("url"));
+		
+	} 
+
+	public void close(){
+		this.ts.shutdown();
+	}
+
+	//TODO
+	public void execute(Tuple input) {
+		try {
+			Status retrieve = queue.take();
+			URLEntity[] urls = retrieve.getURLEntities();
+			for (URLEntity url : urls)
+				this.collector.emit(new Values(url.getExpandedURL()));
+		} catch (InterruptedException e) {
+			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
+		}
+		
+	}
+
+	@Override
+	public void open(Map<String, Object> conf, TopologyContext context, SpoutOutputCollector collector) {
 		this.bbox = new double[2][2];
 		this.bbox[0][0] = (Double) conf.get("sw0");
 		this.bbox[0][1] = (Double) conf.get("sw1");
@@ -97,23 +136,35 @@ public class TwitterSpout extends BaseRichSpout {
 		this.ts.filter(query);
 	}
 
-	public void nextTuple() {
-		try {
-			Status retrieve = queue.take();
-			URLEntity[] urls = retrieve.getURLEntities();
-			for (URLEntity url : urls)
-				this.collector.emit(new Values(url.getExpandedURL()));
-		} catch (InterruptedException e) {
-			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
-		}
-
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("url"));
+	@Override
+	public void deactivate() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void close(){
-		this.ts.shutdown();
-	} 
+	@Override
+	public void ack(Object msgId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fail(Object msgId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<String, Object> getComponentConfiguration() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }
