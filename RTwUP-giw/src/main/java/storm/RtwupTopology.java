@@ -4,14 +4,16 @@ import storm.bolts.ExpanderBolt;
 import storm.bolts.RedisPublisherBolt;
 import storm.bolts.URLCounterBolt;
 import storm.spouts.TwitterSpout;
-import backtype.storm.Config;
-import backtype.storm.LocalCluster;
-import backtype.storm.StormSubmitter;
-import backtype.storm.utils.*;
-import backtype.storm.generated.AlreadyAliveException;
-import backtype.storm.generated.InvalidTopologyException;
-import backtype.storm.topology.TopologyBuilder;
-import backtype.storm.tuple.Fields;
+import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
+import org.apache.storm.StormSubmitter;
+import org.apache.storm.utils.*;
+import org.apache.storm.generated.AlreadyAliveException;
+import org.apache.storm.generated.AuthorizationException;
+import org.apache.storm.generated.InvalidTopologyException;
+import org.apache.storm.topology.IRichSpout;
+import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Fields;
 
 /**
  * @author Gabriele Proni, Gabriele de Capoa, Daniele Morgantini
@@ -22,7 +24,7 @@ public class RtwupTopology {
 	public static void main(String[] args) {
 		TopologyBuilder builder = new TopologyBuilder();
 
-		builder.setSpout("filteredStream", new TwitterSpout(), 1);
+		builder.setSpout("filteredStream", (IRichSpout) new TwitterSpout(), 1);
 		builder.setBolt("expander", new ExpanderBolt(), 5).shuffleGrouping(
 				"filteredStream");
 		builder.setBolt("urlCounter", new URLCounterBolt(), 5).fieldsGrouping(
@@ -32,13 +34,13 @@ public class RtwupTopology {
 
 		Config conf = new Config();
 		conf.setDebug(true);
-		
+				
 		if (args != null && args.length > 0) {
-
+			
 			conf.setNumWorkers(3);
 
 			conf.put("topN", Integer.parseInt(args[1])); //assuming that topN is the second argument
-			conf.put("host", args[2]); //assuming that topN is the second argument
+			conf.put("host", args[2]);
 			conf.put("sw0", Double.parseDouble(args[3]));
 			conf.put("sw1", Double.parseDouble(args[4]));
 			conf.put("ne0", Double.parseDouble(args[5]));
@@ -51,10 +53,12 @@ public class RtwupTopology {
 				e.printStackTrace();
 			} catch (InvalidTopologyException e) {
 				e.printStackTrace();
+			} catch (AuthorizationException e) {
+				e.printStackTrace();
 			}
 		} else {
 			conf.put("topN", 10);
-			conf.put("host", "localhost");
+			conf.put("host", "127.0.0.1");
 			conf.put("sw0", 12.20);
 			conf.put("sw1", 41.60);
 			conf.put("ne0", 12.80);
@@ -66,6 +70,7 @@ public class RtwupTopology {
 				Utils.sleep(300000);
 				cluster.killTopology("RTwUP");
 				cluster.shutdown();
+				cluster.close();
 			}catch (Exception e){
 				System.err.println("Error");
 				e.printStackTrace();

@@ -74,8 +74,9 @@ public class RedisPublisherIntegrationTestCase {
 
 	@AfterClass
 	public void tearDown() {
-		this.pool.returnResource(this.jedis_publisher);
-		this.pool.returnResource(this.jedis_subscriber);
+		this.jedis_publisher.close();
+		this.jedis_subscriber.close();
+		this.pool.close();
 		this.pool.destroy();
 	}
 }
