@@ -3,6 +3,8 @@
  */
 const PORT = 8000;
 const HOST = 'localhost';
+const REDIS_PORT = 6379;
+const REDIS_HOST = 'localhost';
 
 const express = require('express');
 const http = require('http');
@@ -25,17 +27,14 @@ app.get('/', function (req, res) {
 
 if (!module.parent) {
 	server.listen(PORT, HOST, function () {
-		const host = server.address().address;
-		const port = server.address().port;
-		const address = `http://${host}:${port}`;
-		log('info', "Server in ascolto all'indirizzo: "+ address);
+		log('info', "Server in ascolto all'indirizzo: http://"+ HOST + ":" + PORT);
 	  
 		const socket = io.listen(server);
 	    socket.on('connection', function(client) {
 	    	log("info", "Listening IO");
 	    });
 		
-		const subscriber = redis.createClient();
+		const subscriber = redis.createClient(REDIS_PORT,REDIS_HOST);
 		 
 		subscriber.on("connect", function() {
 			log('info', 'Connected to Redis server.');
