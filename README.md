@@ -33,11 +33,11 @@ For more information, you can refer to the wiki pages.
 
 ##Wiki
 
-* [Setting up the Maven project] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-the-Maven-project)
-* [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use)
-* [Installing and setting up Node.js] (https://github.com/Dani7B/RTwUP/wiki/Installing-and-setting-up-Node.js)
-* [Setting up Redis] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-Redis)
-* [How to start RTwUP] (https://github.com/Dani7B/RTwUP/wiki/How-to-start-RTwUP)
+* [Setting up the Maven project] (https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-the-Maven-project)
+* [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP-giw/wiki/Creation-of-a-Twitter-account-to-use)
+* [Installing and setting up Node.js] (https://github.com/Dani7B/RTwUP-giw/wiki/Installing-and-setting-up-Node.js)
+* [Setting up Redis] (https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-Redis)
+* [How to start RTwUP] (https://github.com/Dani7B/RTwUP-giw/wiki/How-to-start-RTwUP)
 
 
 
