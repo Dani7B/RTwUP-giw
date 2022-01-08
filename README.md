@@ -21,7 +21,7 @@ The links of interest are the ones retrieved from the entities/urls field of the
 * if the Tweet contains a “shortened” form of the URL (e.g. bit.ly/13NHE7v , goo.gl/uJH2Y , http://instagr.am/p/S3l5rQjCcA/, etc ...), then it has to be expanded in order to obtain the completely expanded form (eventually after several expansions); the count can then be assigned to it.
  
 Starting from the final expanded form, domain information can be extracted to organize the current results.  
-This must be done in real time, using [Storm][01].
+This must be done in real time, using [Apache Storm][01].
 
 **Adopted Technologies**
 RTwUP is developed in *Java*.  
