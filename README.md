@@ -1,6 +1,6 @@
-#RTwUP
+**RTwUP**
 
-##Realtime Twitter Url Popularity
+**Realtime Twitter Url Popularity**
 Given a suitably filtered stream of documents returned by a Twitter query, calculate real-time statistics and show the ranking of the most twittered URLs since system activation.
 The statistics must be updated on screen every N seconds.  
 They show the links organized into various domain categories, each with its counting popularity:  
@@ -13,7 +13,7 @@ They show the links organized into various domain categories, each with its coun
 | instagram.com | ... | ...|   
 ...  
 
-##Data Stream Description and Requirements: 
+**Data Stream Description and Requirements**
 The system has to use Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filters them (e.g. according to the coordinates of a polygon centered on Rome, Milan or a city of your choice).  
 The links of interest are the ones retrieved from the entities/urls field of the Tweet json: 
 * first of all, links have to be expanded, reversing the output of Twitter's shortening service (*t.co*);
@@ -23,7 +23,7 @@ The links of interest are the ones retrieved from the entities/urls field of the
 Starting from the final expanded form, domain information can be extracted to organize the current results.  
 This must be done in real time, using [Storm][01].
 
-##Adopted Technologies
+**Adopted Technologies**
 RTwUP is developed in *Java*.  
 To listen to Twitter's stream, it was chosen [Twitter4j][02], *Twitter Stream API* in particular.  
 To process the Tweets real time, it was chosen [Storm][01].  
@@ -31,7 +31,7 @@ The user interface is written as a [Node.js][04] application, making use of [soc
 
 For more information, you can refer to the wiki pages.
 
-##Wiki
+**Wiki**
 
 * [Setting up the Maven project] (https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-the-Maven-project)
 * [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP-giw/wiki/Creation-of-a-Twitter-account-to-use)
@@ -41,7 +41,7 @@ For more information, you can refer to the wiki pages.
 
 
 
-[01]: https://github.com/nathanmarz/storm/wiki "Storm Wiki"
+[01]: https://storm.apache.org "Apache Storm"
 
 [02]: http://twitter4j.org/en/ "Twitter APIs in Java"
 
