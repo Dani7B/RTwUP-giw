@@ -5,8 +5,6 @@ import storm.bolts.RedisPublisherBolt;
 import storm.bolts.URLCounterBolt;
 import storm.spouts.TwitterSpout;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Properties;
 
 import org.apache.storm.Config;
@@ -38,12 +36,9 @@ public class RtwupTopology {
 		conf.setDebug(true);
 				
 		try {
-			
-			File file = new File("resources/config.properties");
-			FileInputStream fis = new FileInputStream(file);
-			
+
 			Properties prop = new Properties();
-			prop.load(fis);
+			prop.load(RtwupTopology.class.getClassLoader().getResourceAsStream("config.properties"));
 			
 			conf.setNumWorkers(Integer.parseInt(prop.getProperty("workers","3")));
 			conf.put("topN", Integer.parseInt(prop.getProperty("topN","10")));
@@ -56,11 +51,13 @@ public class RtwupTopology {
 			conf.put("consumerSecret", prop.getProperty("consumerSecret"));
 			conf.put("tokenKey", prop.getProperty("tokenKey"));
 			conf.put("tokenSecret", prop.getProperty("tokenSecret"));
-						
-			if(args != null && args.length > 0) {
-				StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
+				
+			final String topologyName = prop.getProperty("topologyName","RTwUP");
+			final boolean isProduction = Boolean.valueOf(prop.getProperty("production","true"));
+			
+			if(isProduction) {
+				StormSubmitter.submitTopology(topologyName, conf, builder.createTopology());
 			} else {
-				final String topologyName = prop.getProperty("topologyName","RTwUP");
 				LocalCluster cluster = new LocalCluster();
 				cluster.submitTopology(topologyName, conf, builder.createTopology());
 				Utils.sleep(300000);

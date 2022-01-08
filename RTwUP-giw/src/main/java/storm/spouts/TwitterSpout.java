@@ -84,7 +84,6 @@ public class TwitterSpout implements IRichSpout {
 		this.bbox[1][0] = (Double) conf.get("ne0");
 		this.bbox[1][1] = (Double) conf.get("ne1");
 		
-		
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;
 		this.ts = new TwitterStreamFactory().getInstance();
@@ -137,33 +136,23 @@ public class TwitterSpout implements IRichSpout {
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void deactivate() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void ack(Object msgId) {
-		// TODO Auto-generated method stub
-		
+	public void ack(Object msgId) {	
 	}
 
 	@Override
-	public void fail(Object msgId) {
-		// TODO Auto-generated method stub
-		
+	public void fail(Object msgId) {	
 	}
 
 	@Override
 	public Map<String, Object> getComponentConfiguration() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
 }
