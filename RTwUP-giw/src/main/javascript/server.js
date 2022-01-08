@@ -5,21 +5,27 @@ const PORT = 8000;
 const HOST = 'localhost';
 const REDIS_PORT = 6379;
 const REDIS_HOST = 'localhost';
+const CHANNEL = 'RTwUP';
 
 const express = require('express');
 const http = require('http');
 const path = require('path');
 const redis = require('redis');
-const io = require('socket.io');
 
 const app = express();
 
 const server = http.createServer(app);
 
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*"
+  }
+});
+
 app.use(express.static('public'));
 
 // Serves all the request which includes /images in the url from Images folder
-app.use('/images', express.static(__dirname + '/Images'));
+app.use('/images', express.static(__dirname + '/images'));
 
 app.get('/', function (req, res) {
   res.sendFile(path.resolve('index.html'));
@@ -33,27 +39,36 @@ if (!module.parent) {
 	    socket.on('connection', function(client) {
 	    	log("info", "Listening IO");
 	    });
-		
-		const subscriber = redis.createClient(REDIS_PORT,REDIS_HOST);
-		 
-		subscriber.on("connect", function() {
-			log('info', 'Connected to Redis server.');
-	        subscriber.subscribe('RTwUP');
-	        log('info', 'Subscribed to RTwUP.');
-		});
-		
-		subscriber.on("message", function(channel, message) {
-            socket.send(message);
-            log('msg', "Received from channel "+ channel+ ": "+ message);
+
+        const client = redis.createClient({
+            host: REDIS_HOST,
+            port: REDIS_PORT
         });
-		
-		subscriber.on('disconnect', function() {
-	        log('warn', 'Disconnetting from Redis.');
-	    	subscriber.quit();
-	    });
-		
-	});
+    
+        client.connect();
+    
+        const subscriber = client.duplicate();
+    
+        subscriber.on('error', (err) => log('error', 'Redis Client Error'));
+    
+        subscriber.on('connect', () => {
+            log('info', 'Connected to Redis server.');
+            log('info', 'Subscribing to ' + CHANNEL);
+            subscriber.subscribe(CHANNEL, (message) => {
+              log('msg', "Received from channel "+ CHANNEL + ": " + message);
+              socket.send(message);
+            });
+        });
+        
+        subscriber.on('disconnect', () => {
+            log('warn', 'Disconnetting from Redis.');
+            subscriber.quit();
+        });
+    
+        subscriber.connect();
+    })
 }
+
 
 function log(type, msg) {
 
@@ -78,4 +93,4 @@ function log(type, msg) {
     };
 
     console.log(color + '   ' + type + '  - ' + reset + msg);
-};
+}

@@ -5,7 +5,7 @@
 	content="Gabriele de Capoa, Gabriele Proni, Daniele Morgantini">
 <title>RTwUP - Realtime Twitter URL Popularity</title>
 <script type="text/javascript"
-	src="http://localhost:8000/socket.io/socket.io.js"></script>
+	src="socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	function getHTMLcode(data) {
 		var result = "";
@@ -23,23 +23,26 @@
 		return result;
 	}
 
-	var socket = io.connect('http://localhost:8000/');
-
-	socket.on('connect', function(data) {
-		setStatus('connected');
+	var socket = io("http://localhost:8000");
+	
+	socket.on("connect", () => {
+		setStatus('connected');	
 		socket.emit('subscribe', {
 			channel : 'RTwUP'
 		});
 	});
 
+
+	socket.on("message", data => {
+	  console.log('received a message: ', data);
+		addMessage(data);
+	});
+
+
 	socket.on('reconnecting', function(data) {
 		setStatus('reconnecting');
 	});
 
-	socket.on('message', function(data) {
-		console.log('received a message: ', data);
-		addMessage(data);
-	});
 
 	function addMessage(data) {
 		document.getElementById("ranking").innerHTML = getHTMLcode(data);
