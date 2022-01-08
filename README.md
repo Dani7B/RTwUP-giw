@@ -1,7 +1,7 @@
 **RTwUP**
 
 **Realtime Twitter Url Popularity**
-Given a suitably filtered stream of documents returned by a Twitter query, calculate real-time statistics and show the ranking of the most twittered URLs since system activation.
+Given a suitably filtered stream of documents returned by a Twitter query, calculate real-time statistics and show the ranking of the most tweeted URLs since system activation.
 The statistics must be updated on screen every N seconds.  
 They show the links organized into various domain categories, each with its counting popularity:  
 
