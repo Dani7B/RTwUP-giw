@@ -26,7 +26,7 @@ This must be done in real time, using [Storm][01].
 **Adopted Technologies**
 RTwUP is developed in *Java*.  
 To listen to Twitter's stream, it was chosen [Twitter4j][02], *Twitter Stream API* in particular.  
-To process the Tweets real time, it was chosen [Storm][01].  
+To process the Tweets real time, it was chosen [Apache Storm][01].  
 The user interface is written as a [Node.js][04] application, making use of [socket.io][05] and [Redis][06] to display results in real time.  
 
 For more information, you can refer to the wiki pages.
