@@ -33,11 +33,11 @@ For more information, you can refer to the wiki pages.
 
 **Wiki**
 
-* [Setting up the Maven project] (https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-the-Maven-project)
-* [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP-giw/wiki/Creation-of-a-Twitter-account-to-use)
-* [Installing and setting up Node.js] (https://github.com/Dani7B/RTwUP-giw/wiki/Installing-and-setting-up-Node.js)
-* [Setting up Redis] (https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-Redis)
-* [How to start RTwUP] (https://github.com/Dani7B/RTwUP-giw/wiki/How-to-start-RTwUP)
+* [Setting up the Maven project][07]
+* [Creation of a Twitter account to use][08]
+* [Installing and setting up Node.js][09]
+* [Setting up Redis][10]
+* [How to start RTwUP][11]
 
 
 
@@ -52,3 +52,13 @@ For more information, you can refer to the wiki pages.
 [05]: http://socket.io/ "socket.io web page"
 
 [06]: http://redis.io/ "Redis web page"
+
+[07]: https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-the-Maven-project "Setting up the Maven project"
+
+[08]: https://github.com/Dani7B/RTwUP-giw/wiki/Creation-of-a-Twitter-account-to-use "Creation of a Twitter account to use"
+
+[09]: https://github.com/Dani7B/RTwUP-giw/wiki/Installing-and-setting-up-Node.js "Installing and setting up Node.js"
+
+[10]: https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-Redis "Setting up Redis"
+
+[11]: https://github.com/Dani7B/RTwUP-giw/wiki/How-to-start-RTwUP "How to start RTwUP"
