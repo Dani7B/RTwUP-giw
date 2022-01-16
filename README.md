@@ -34,7 +34,8 @@ For more information, you can refer to the wiki pages.
 * [Creation of a Twitter account to use][08]
 * [Installing and setting up Node.js][09]
 * [Setting up Redis][10]
-* [How to start RTwUP][11]
+* [How to install prerequisite software][11]
+* [How to start RTwUP][12]
 
 
 
@@ -58,4 +59,6 @@ For more information, you can refer to the wiki pages.
 
 [10]: https://github.com/Dani7B/RTwUP-giw/wiki/Setting-up-Redis "Setting up Redis"
 
-[11]: https://github.com/Dani7B/RTwUP-giw/wiki/How-to-start-RTwUP "How to start RTwUP"
+[11]: https://github.com/Dani7B/RTwUP-giw/wiki/How-to-install-prerequisite-software "How to install prerequisite software"
+
+[12]: https://github.com/Dani7B/RTwUP-giw/wiki/How-to-start-RTwUP "How to start RTwUP"
